@@ -1,0 +1,65 @@
+p34->2  ^add    %q[0-9]*
+p01->1  ^add    %[swx]
+p34->2  ^addp   %q[0-9]*
+p1->1   ^adds   %[swx]
+p01->1  ^adr
+p01->1  ^adrp 
+p34->2  ^and    %q
+p01->1  ^and    %[swx]
+p1->1   ^ands   %[swx]
+p01->1  ^asrv   %[swx]
+p34->2  ^dup    %[swx]
+p01->1  ^eor    %[swx]
+p01->1  ^extr   %[swx]
+p34->1  ^fadd   %[swxd]
+p34->1  ^fsub   %[swxd]
+p34->1  ^fmul   %[swxd]
+p34->1  ^fmov
+p34->2  ^ins   
+p34->1  ^frint[a]
+p34->1  ^fmadd  %[swxd]
+p34->1  ^fnmsub
+p34->1  ^fcvt[ampz]s %[swxd]
+p3->1   ^fdiv   %[swxd]
+p5->1   ^ldp   
+p5->1   ^ldr 
+p5->1   ^ldar 
+p5->1   ^ldaxr
+p5->1   ^ldur
+p5->1   ^ldrs[wb]
+p5->1   ^ldxr
+p5->1   ^ldr[bh]
+p5->1   ^ldur  
+p01->1  ^ls(r|l)v
+p2->1   ^madd   %[swx]
+p01->1  ^mov[nkzi]
+p2->1   ^msub   %[swx]
+p01->1  ^orn    %[swx]
+p34->2  ^orr    %q[0-9]*
+p01->1  ^orr    %[swx]
+p5->1   ^prfm  
+p01->1  ^rbit   %[swx]
+p1->1   ^ret    %[swx]
+p01->1  ^rev    %[swx]
+p01->1  ^rev16  %[swx]
+p01->1  ^sbc
+p034->2 ^scvtf
+p01->1  ^(s|u)bfm 
+p2->1   ^smaddl %[swx]
+p3->1   ^smulh  %[swx]
+p5->1   ^stp    %[swx]
+p5->2   ^stp    %[q]
+p5->1   ^str    %[dswxq]
+p5->1   ^stlr   %[swxq]
+p5->1   ^str[bh]   %[swx]
+p5->1   ^stur   %[swxdq]
+p01->1  ^sub    %[swx]
+p1->1   ^subs   %[swx]
+p1->1   ^tbnz  
+p1->1   ^tbz  
+p01->1  ^ubfm  
+p2->1   ^udiv 
+p2->1   ^umaddl 
+p34->2  ^uminv
+p3->1   ^umov   %q
+p2->1   ^umulh
