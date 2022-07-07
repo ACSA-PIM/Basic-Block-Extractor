@@ -160,40 +160,10 @@ def extractBasicblockFullCommand(taskfilename,datafile,taskname,rank):
     # fwrite.close()
     fread.close()
 
-    # fwriteUops = open("../"+uopsFolder+"/"+taskfilename+"/Full_"+str(taskname)+"_skip_"+str(skip_num)+"_uops.log", "wb")
-    # pickle.dump(uops_testes, fwriteUops)
-    # fwriteUops.close()
-
-    # fwrite_uniqueInst = open("../"+uopsFolder+"/"+taskfilename+"/Full_"+str(taskname)+"_skip_"+str(skip_num)+"_uniqueInst.log", "w")
-    # unique_uops=set()
-    # frequencyUops= defaultdict(int)
-    # # uniqueInst
-    # for uniqueInst in sorted(unique_inst):
-    #     uops=classify(str(uniqueInst),matchers)
-    #     fwrite_uniqueInst.writelines(str(uniqueInst)+" "+str(frequency[uniqueInst])+" "+uops+"\n")
-    #     unique_uops.add(uops)
-    #     frequencyUops[uops]+=frequency[uniqueInst]
-    # fwrite_uniqueInst.close()
-    # logging.debug(unique_inst)
-
-    # Totalwords=0
-    # for uniqueUops in sorted(unique_uops):
-    #     Totalwords+=frequencyUops[uniqueUops]
-    # fwrite_uniqueUops = open("../"+uopsFolder+"/"+taskfilename+"/Full_"+str(taskname)+"_skip_"+str(skip_num)+"_uniqueUops.log", "w")
-    # for uniqueUops in sorted(unique_uops):
-    #     fwrite_uniqueUops.writelines(uniqueUops+" "+str(frequencyUops[uniqueUops])+" "+str(frequencyUops[uniqueUops]/Totalwords)+"%\n")
-    # fwrite_uniqueUops.close()
-
     fwriteblockfreq = open("../"+blockFrequencyFolder+"/"+str(taskname)+"_skip_"+str(skip_num)+".log", "w")
     for tmp_block_binary_reverse in unique_revBiblock:
         fwriteblockfreq.writelines(tmp_block_binary_reverse+','+str(frequencyRevBiBlock[tmp_block_binary_reverse])+"\n")
     fwriteblockfreq.close()
-
-#     fwrite_blockfreq = open("../"+uopsFolder+"/"+taskfilename+"/Full_"+str(taskname)+"_skip_"+str(skip_num)+"_uniqueBlockFreq.log", "w")
-#     # block frequency
-#     for tmp_text in sorted(unique_block):
-#         fwrite_blockfreq.writelines(tmp_text+" "+str(frequencyBlock[tmp_text])+"\n")
-#     fwrite_blockfreq.close()
 
     return [[],textNum,unique_block,frequencyBlock,uops_testes]
 

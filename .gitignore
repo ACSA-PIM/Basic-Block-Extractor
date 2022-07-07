@@ -3,3 +3,5 @@ uops/
 !tensorflow_41Gdir_00all_skip_2.log
 blockFrequencyParts/
 blockFrequency/
+Pyenv
+__pycache__
