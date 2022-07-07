@@ -11,6 +11,8 @@ import sys
 # from OSACA import *
 from collections import defaultdict
 from basicBlockGenerate import readUopsTable,binaryReverse
+import time
+
 
 class Process(mp.Process):
     def __init__(self, *args, **kwargs):
@@ -106,9 +108,12 @@ def blocks(files, size=65536):
         yield b
 
 def fastfileLineNum(filename):
-    yellowPrint("fast reading file Lines Num...")
+    yellowPrint("fast reading file Lines Num...at: {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    processBeginTime=time.time()
     with open(filename, "r",encoding="utf-8",errors='ignore') as f:
-        return sum(bl.count("\n") for bl in blocks(f))
+        totalNum = sum(bl.count("\n") for bl in blocks(f))
+        passPrint("wait {} to finish reading file Lines Num {} at: {}".format(time2String(int(time.time()-processBeginTime)),totalNum,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+        return totalNum
 
 def mergeQueue2dataDict(queueDict,dataDict):
     for key, value in dataDict.dataDict.items():
