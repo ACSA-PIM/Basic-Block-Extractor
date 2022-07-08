@@ -17,7 +17,7 @@ glv._set("outputFilePath", "/home/shaojiemike/test/DynamoRIO/AssemblyBasicBlockL
 glv._set("ProcessNum",20)
 # glv._set("failedRetryTimes",1)
 glv._set("findTimeout",5)
-glv._set("skip_num",2)
+glv._set("skip_num",0)
 # glv._set("timeout",0) #由输入设置default值
 glv._set("debug","yes")
 

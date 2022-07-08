@@ -51,12 +51,22 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
 
     matchers = readUopsTable()
     # for line in tqdm(fread.readlines()[startFileLine:endFileLine],total=endFileLine-startFileLine,desc=str("{:2d}".format(rank))):
-    i=1
+    totalLine=0
+    partLine=1
     try:
-        for line in fread.readlines()[startFileLine:endFileLine]:
-            if i%5==0:
-                sendPipe.send(i)
-            i+=1
+        # for line in fread.readline():
+        line = fread.readline()    # 读取第一行
+        while line is not None and line != '':
+            if totalLine<startFileLine:
+                totalLine+=1
+                continue
+            elif totalLine>=endFileLine:
+                break
+            totalLine+=1
+
+            if partLine%20==0:
+                sendPipe.send(partLine)
+            partLine+=1
             ic(line)
             if line[13:17]=="0000" and line[42:43]!="b" and line[42:43]!="c" \
                 and line[42:45]!="nop" and line[42:45]!="dmb" and line[42:45]!="msr"\
@@ -64,26 +74,29 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
                 and line[42:45]!="isb" and line[42:45]!="ret" and line[42:45]!="tbz"\
                 and line[42:45]!="tbn": #去除b 和c开头的
                 # tmp_inst_text.append(line[42:-1])
-                ic(line[42:-1])
+                # ic("read normal lines",line[42:-1])
                 tmp_inst_text.append(line[42:-1])# 去除 \n
                     # tmp_full_inst_text.append(line[42:])
                 tmp_inst_binary.append(line[31:39])
                 tmp_inst_binary_reverse.append(binaryReverse(line[31:39]))
             elif line[13:17]=="writ" or line[13:17]=="read" or line[42:43]=="b":
-                ic("ACC")
+                # ic("Cut")
                 if len(tmp_inst_text) > glv._get("skip_num"):
-                    ic(tmp_inst_binary_reverse)
+                    # ic("ACC")
+                    # ic(tmp_inst_binary_reverse)
                     # textNum+=1
                     unique_revBiblock.add(str(' '.join(tmp_inst_binary_reverse)))
                     frequencyRevBiBlock[' '.join(tmp_inst_binary_reverse)] += 1
                 tmp_inst_text=[]
                 tmp_inst_binary=[]
                 tmp_inst_binary_reverse=[]
+            line = fread.readline()    # 读取下一行
     except Exception as e:
         sendPipe.send(e)
         errorPrint("error = {}".format(e))
         raise TypeError("paralleReadProcess = {}".format(e))
     fread.close() 
+    ic("---------------------SubProcess logEntry-------------------------")
     ic(unique_revBiblock)
     ic(frequencyRevBiBlock)
     queueDict.get("unique_revBiblock").put(unique_revBiblock)
@@ -181,6 +194,7 @@ def MultiProcessLog(logEntry):
     # for i in tqdm(range(ProcessNum)):
     for i in range(ProcessNum):
         dataDict=reduceQueue2dataDict(queueDict,dataDict)
+    ic("---------------------logEntry-------------------------")
     ic(dataDict.get("unique_revBiblock"))
     ic(dataDict.dataDict["frequencyRevBiBlock"])
     return dataDict

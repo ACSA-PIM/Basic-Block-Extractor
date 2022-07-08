@@ -22,8 +22,8 @@ def binaryReverse(string):
     return string[6:8]+string[4:6]+string[2:4]+string[0:2]
 
 def write2log(totalDataDict):
-    # ic(totalDataDict.get("unique_revBiblock"))
-    # ic(totalDataDict.dataDict["frequencyRevBiBlock"])
+    ic(totalDataDict.get("unique_revBiblock"))
+    ic(totalDataDict.dataDict["frequencyRevBiBlock"])
     unique_revBiblock = totalDataDict.get("unique_revBiblock")
     frequencyRevBiBlock = totalDataDict.dataDict["frequencyRevBiBlock"]
     filename = glv._get("outputFilePath")+ glv._get("outputTaskName")
