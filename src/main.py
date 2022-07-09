@@ -24,15 +24,18 @@ def main():
     taskList = findRawLogList()
 
     taskNum=0
+    useFileNum=0
     totalDataDict = dataDictInit()
     for logEntry in taskList:
         taskNum+=1
         colorPrint("logEntry {:>3d}/{:>3d}: {}".format(taskNum,len(taskList),logEntry[:-1]),"magenta")
         # if logEntry[:-1]=="small.log" or logEntry[:-1]=="small2.log" or logEntry[:-1]=="middle.log":# for code test
-        if logEntry[:-1]=="openblas_utest.log":# for code test
+        if glv._get("useAllFileInDirectory")=="yes" or logEntry[:-1] in glv._get("useAllFileListInDirectory") :# for code test
+            useFileNum+=1
             inDict = MultiProcessLog(logEntry)
             colorPrint("Reduce part {} to tmpAll {}".format(len(inDict.get("unique_revBiblock")),len(totalDataDict.get("unique_revBiblock"))),"grey")
-            totalDataDict = mergeDataDict(MultiProcessLog(logEntry),totalDataDict)
+            totalDataDict = mergeDataDict(inDict,totalDataDict)
+    glv._set("useFileNum",useFileNum)
     write2log(totalDataDict)
         # DynamoRIO_Offline(logEntry)
         # if not checkDiskUsage():

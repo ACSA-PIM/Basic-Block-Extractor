@@ -22,13 +22,15 @@ def inputParameters():
         dest="ProcessNum",
         type=int, default="20"
     )
-    # parser.add_argument(
-    #     "-t",
-    #     "--timeout",
-    #     help="sub program interrupt time(eg. llvm-mca, bhive, OSACA. less time causes less useful output",
-    #     dest="timeout",
-    #     type=int, default="250"
-    # )
+    parser.add_argument(
+        "-u",
+        "--useAll",
+        help="is use All Files In Directory or choose a fileList in config.py",
+        dest="useAllFileInDirectory",
+        type=str,
+        choices=["yes", "no"],
+        default="no",
+    )
     parser.add_argument(
         "-d",
         "--debug",
@@ -41,12 +43,12 @@ def inputParameters():
     args = parser.parse_args()
     # glv._set("BHiveCount",args.BHiveCount)
     glv._set("ProcessNum",args.ProcessNum)
-    # glv._set("timeout",args.timeout)
+    glv._set("useAllFileInDirectory",args.useAllFileInDirectory)
     glv._set("debug",args.debug)
     pPrint(glv.GLOBALS_DICT)
     # passPrint("parameter BHiveCount is : %s" % args.BHiveCount)
     passPrint("parameter ProcessNum is : %s" % args.ProcessNum)
-    # passPrint("parameter timeout is : %d " % args.timeout)
+    passPrint("parameter useAllFileInDirectory is : %s " % args.useAllFileInDirectory)
     passPrint("parameter debug is : %s " % args.debug)
     # yellowPrint("less timeout causes less or no output!!!")
     return args

@@ -7,19 +7,26 @@ glv._init()
 glv._set("taskName", "OpenBLASRawAssembly")# alse the directory
 glv._set("inputFilePath", "/home/shaojiemike/test/DynamoRIO/")
 glv._set("UopsTableFilePath", "./arm2uops/UopsTable.txt")
-# glv._set("findRegex", "*test*")
-glv._set("outputTaskName", "openblas_utest.log")
+
+glv._set("outputTaskName", "openblas_utest")
 glv._set("outputFilePath", "/home/shaojiemike/test/DynamoRIO/AssemblyBasicBlockLog/")
 
-# glv._set("DynamoRIO-drrun","/home/shaojiemike/Download/DynamoRIO-AArch64-Linux-8.0.18895/bin64/drrun")
-# glv._set("DynamoRIO-offline","/home/shaojiemike/Download/DynamoRIO-AArch64-Linux-8.0.18895/bin64/drrun -m \
-#             1 -t drcachesim -outdir ~/test/DynamoRIO  -offline --")
+glv._set("useAllFileInDirectory","no")
+glv._set("useAllFileListInDirectory",[
+                                    # "openblas_utest.log",
+                                    # "xzcblat1.log",
+                                    "middle.log",
+                                    "small2.log"
+                                    ])
+
+
 glv._set("ProcessNum",20)
 # glv._set("failedRetryTimes",1)
 glv._set("findTimeout",5)
 glv._set("skip_num",0)
 # glv._set("timeout",0) #由输入设置default值
 glv._set("debug","yes")
+glv._set("sendSkipNum",2000)
 
 # def pasteFullFileName(taskfilenameprefixWithoutPath):
 #     taskfilenamesubfix=glv._get("taskfilenamesubfix")

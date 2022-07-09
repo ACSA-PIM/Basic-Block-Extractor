@@ -50,6 +50,7 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
     frequencyRevBiBlock = defaultdict(int)
 
     matchers = readUopsTable()
+    sendSkipNum=int((endFileLine-startFileLine)/400)+1
     # for line in tqdm(fread.readlines()[startFileLine:endFileLine],total=endFileLine-startFileLine,desc=str("{:2d}".format(rank))):
     totalLine=0
     partLine=1
@@ -64,7 +65,7 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
                 break
             totalLine+=1
 
-            if partLine%20==0:
+            if partLine%sendSkipNum==0:
                 sendPipe.send(partLine)
             partLine+=1
             ic(line)
@@ -101,7 +102,7 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
     ic(frequencyRevBiBlock)
     queueDict.get("unique_revBiblock").put(unique_revBiblock)
     queueDict.get("frequencyRevBiBlock").put(frequencyRevBiBlock)
-    sendPipe.send(50000)
+    sendPipe.send(partLine+sendSkipNum)
     sendPipe.close()
     ic("MPI Process end {:2d} {}~{}".format(rank,startFileLine,endFileLine))
 
@@ -177,7 +178,7 @@ def MultiProcessLog(logEntry):
     for p in pList:
         p.start()
     
-    taskName=glv._get("taskName")+logEntry[:-1]
+    taskName=glv._get("taskName")+" "+logEntry[:-1]
     # https://stackoverflow.com/questions/19924104/python-multiprocessing-handling-child-errors-in-parent
     if glv._get("debug")=='no':
         stdscr = curses.initscr()

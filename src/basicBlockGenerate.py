@@ -26,9 +26,10 @@ def write2log(totalDataDict):
     ic(totalDataDict.dataDict["frequencyRevBiBlock"])
     unique_revBiblock = totalDataDict.get("unique_revBiblock")
     frequencyRevBiBlock = totalDataDict.dataDict["frequencyRevBiBlock"]
-    filename = glv._get("outputFilePath")+ glv._get("outputTaskName")
+    outputTaskNameFullName=glv._get("outputTaskName")+"_useFileNum_"+str(glv._get("useFileNum"))+"_skipNum_"+str(glv._get("skip_num"))
+    filename = glv._get("outputFilePath")+ outputTaskNameFullName
     fwriteblockfreq = open(filename, "w")
     for tmp_block_binary_reverse in unique_revBiblock:
         fwriteblockfreq.writelines(tmp_block_binary_reverse+','+str(frequencyRevBiBlock[tmp_block_binary_reverse])+"\n")
     fwriteblockfreq.close()
-    yellowPrint("write {} to log Finished: {}".format(len(totalDataDict.get("unique_revBiblock")),glv._get("outputTaskName")))
+    yellowPrint("write {} to log Finished: {}".format(len(totalDataDict.get("unique_revBiblock")),outputTaskNameFullName))
