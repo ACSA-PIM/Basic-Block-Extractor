@@ -5,18 +5,18 @@ import time
 glv._init()
 
 glv._set("taskName", "OpenBLASRawAssembly")# alse the directory
-glv._set("inputFilePath", "/home/shaojiemike/test/DynamoRIO/")
+glv._set("inputFilePath", "/home/shaojiemike/test/DynamoRIO/") #DynamoRIO/
 glv._set("UopsTableFilePath", "./arm2uops/UopsTable.txt")
 
-glv._set("outputTaskName", "openblas_utest")
+glv._set("outputTaskName", "OpenBLAS_test3")
 glv._set("outputFilePath", "/home/shaojiemike/test/DynamoRIO/AssemblyBasicBlockLog/")
 
 glv._set("useAllFileInDirectory","no")
 glv._set("useAllFileListInDirectory",[
-                                    # "openblas_utest.log",
+                                    "xscblat2.log"
                                     # "xzcblat1.log",
-                                    "middle.log",
-                                    "small2.log"
+                                    # "middle.log",
+                                    # "small2.log"
                                     ])
 
 

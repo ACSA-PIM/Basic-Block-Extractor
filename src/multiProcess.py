@@ -87,8 +87,8 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
 
                 ic("read normal lines",line[matchAbbreviationStart:-1])
                 tmp_inst_text.append(line[matchAbbreviationStart:-1])# 去除 \n
-                tmp_inst_binary.append(line[31:39])
-                tmp_inst_binary_reverse.append(binaryReverse(line[31:39]))
+                tmp_inst_binary.append(line[matchAbbreviationStart-11:matchAbbreviationStart-3])
+                tmp_inst_binary_reverse.append(binaryReverse(line[matchAbbreviationStart-11:matchAbbreviationStart-3]))
             elif line[matchInstructionStart:matchInstructionStart+4]=="writ" or \
                 line[matchInstructionStart:matchInstructionStart+4]=="read" or \
                 line[matchAbbreviationStart:matchAbbreviationStart+1]=="b":
