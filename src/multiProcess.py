@@ -6,6 +6,7 @@ from multiBar import *
 from collections import defaultdict
 from tsjPython.tsjCommonFunc import *
 import sys
+import re
 # from Bhive import *
 # from llvm_mca import *
 # from OSACA import *
@@ -54,10 +55,18 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
     # for line in tqdm(fread.readlines()[startFileLine:endFileLine],total=endFileLine-startFileLine,desc=str("{:2d}".format(rank))):
     totalLine=0
     partLine=1
+    prefixLen=0
+    matchInstructionStart=13
+    matchAbbreviationStart=42
     try:
         # for line in fread.readline():
         line = fread.readline()    # 读取第一行
         while line is not None and line != '':
+            if prefixLen==0:
+                prefixLen=len(re.match("^(T[a-zA-Z0-9]*) ",line).group(1))
+                ic(prefixLen)
+                matchInstructionStart=prefixLen+5
+                matchAbbreviationStart=prefixLen+34
             if totalLine<startFileLine:
                 totalLine+=1
                 continue
@@ -69,23 +78,23 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
                 sendPipe.send(partLine)
             partLine+=1
             ic(line)
-            if line[13:17]=="0000" and line[42:43]!="b" and line[42:43]!="c" \
-                and line[42:45]!="nop" and line[42:45]!="dmb" and line[42:45]!="msr"\
-                and line[42:45]!="mrs" and line[42:45]!="svc" and line[42:45]!="sys"\
-                and line[42:45]!="isb" and line[42:45]!="ret" and line[42:45]!="tbz"\
-                and line[42:45]!="tbn": #去除b 和c开头的
-                # tmp_inst_text.append(line[42:-1])
-                # ic("read normal lines",line[42:-1])
-                tmp_inst_text.append(line[42:-1])# 去除 \n
-                    # tmp_full_inst_text.append(line[42:])
+            if line[matchInstructionStart:matchInstructionStart+4]=="0000" \
+                and line[matchAbbreviationStart:matchAbbreviationStart+1]!="b" and line[matchAbbreviationStart:matchAbbreviationStart+1]!="c" \
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="nop" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="dmb" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="msr"\
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="mrs" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="svc" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="sys"\
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="isb" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="ret" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="tbz"\
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="tbn": #去除b 和c开头的
+
+                ic("read normal lines",line[matchAbbreviationStart:-1])
+                tmp_inst_text.append(line[matchAbbreviationStart:-1])# 去除 \n
                 tmp_inst_binary.append(line[31:39])
                 tmp_inst_binary_reverse.append(binaryReverse(line[31:39]))
-            elif line[13:17]=="writ" or line[13:17]=="read" or line[42:43]=="b":
-                # ic("Cut")
+            elif line[matchInstructionStart:matchInstructionStart+4]=="writ" or \
+                line[matchInstructionStart:matchInstructionStart+4]=="read" or \
+                line[matchAbbreviationStart:matchAbbreviationStart+1]=="b":
+                ic("Cut")
                 if len(tmp_inst_text) > glv._get("skip_num"):
-                    # ic("ACC")
-                    # ic(tmp_inst_binary_reverse)
-                    # textNum+=1
+                    ic("ACC")
                     unique_revBiblock.add(str(' '.join(tmp_inst_binary_reverse)))
                     frequencyRevBiBlock[' '.join(tmp_inst_binary_reverse)] += 1
                 tmp_inst_text=[]
@@ -100,8 +109,8 @@ def paralleReadProcess(filename,sendPipe,rank, startFileLine,endFileLine, queueD
     ic("---------------------SubProcess logEntry-------------------------")
     ic(unique_revBiblock)
     ic(frequencyRevBiBlock)
-    queueDict.get("unique_revBiblock").put(unique_revBiblock)
     queueDict.get("frequencyRevBiBlock").put(frequencyRevBiBlock)
+    queueDict.get("unique_revBiblock").put(unique_revBiblock)
     sendPipe.send(partLine+sendSkipNum)
     sendPipe.close()
     ic("MPI Process end {:2d} {}~{}".format(rank,startFileLine,endFileLine))
@@ -184,6 +193,7 @@ def MultiProcessLog(logEntry):
         stdscr = curses.initscr()
         multBar(taskName,ProcessNum,total,sendPipe,receivePipe,pList,stdscr)
     
+    ic(queueDict.get("unique_revBiblock").qsize())
     while queueDict.get("unique_revBiblock").qsize()<ProcessNum:
         print("QueueNum : {}".format(queueDict.get("unique_revBiblock").qsize()))
         sys.stdout.flush()
