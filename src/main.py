@@ -9,7 +9,8 @@ from tsjPython.tsjCommonFunc import *
 # from excel import *
 from data import dataDictInit,mergeDataDict
 from multiProcess import MultiProcessLog
-
+from multiBar import time2String
+import time
 
 def normalMode():
     # check directory
@@ -34,6 +35,9 @@ def normalMode():
     write2log(totalDataDict)
 
 def main():
+    yellowPrint("program start at: {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    glv._set("processBeginTime",time.time())
+    
     ## icecream & input
     checkPipeInputMode()
     args=inputParameters()
@@ -44,6 +48,6 @@ def main():
         normalMode()
     elif glv._get("mode")=="pipeInputMode":
         readSavePile()
-        
+    passPrint("wait {} to finish at: {}".format(time2String(int(time.time()-glv._get("processBeginTime"))),time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))) 
 if __name__ == "__main__":
     main()

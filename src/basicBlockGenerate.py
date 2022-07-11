@@ -3,6 +3,7 @@ from tsjPython.tsjCommonFunc import *
 import global_variable as glv
 from collections import defaultdict
 import sys
+from multiBar import time2String
 
 def readSavePile():
     tmp_inst_text=[]
@@ -55,9 +56,11 @@ def readSavePile():
             line = sys.stdin.readline()    # 读取下一行
     except KeyboardInterrupt:
         errorPrint("ctrl+c KeyboardInterrupt lead to Save tmp file……")
-        writePipeModeFile(unique_revBiblock,frequencyRevBiBlock)
+        # writePipeModeFile(unique_revBiblock,frequencyRevBiBlock)
+        # passPrint("wait {} to finish at: {}".format(time2String(int(time.time()-glv._get("processBeginTime"))),time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     except Exception as e:
         errorPrint("error = {}".format(e))
+        writePipeModeFile(unique_revBiblock,frequencyRevBiBlock)
         raise TypeError("readSavePile Error = {}".format(e))
     writePipeModeFile(unique_revBiblock,frequencyRevBiBlock)
 

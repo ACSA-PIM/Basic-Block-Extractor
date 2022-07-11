@@ -26,7 +26,13 @@
 ### add command pipe Input Support
 
 ```
+~/Download/DynamoRIO-AArch64-Linux-8.0.18895/bin64/drrun -t drcachesim -simulator_type view -indir drmemtrace.fftw_dft_r2c_1d_c_example.exe.987366.7729.dir 2>&1|python ~/github/BHive-Extract/src/main.py -o ~/fftw.log -d no
+
 time ~/Download/DynamoRIO-AArch64-Linux-8.0.18895/bin64/drrun -t drcachesim -simulator_type view -indir drmemtrace.python3.8.4097740.2425.dir | python ./src/main.py -outFile ~/test.result
 
 cat small_assembly.log |python ./src/main.py -outFile ~/test.result
 ```
+
+但是这样跑轻松上2万。按照原本方法只有2000？ 是pipe缓存区溢出吗？导致block打乱？
+
+而且数据具有严重的长尾效应。
