@@ -20,3 +20,13 @@
 ## 假如串行
 
 10*25 分钟。加速比 25/3=8倍。
+
+## Doing
+
+### add command pipe Input Support
+
+```
+time ~/Download/DynamoRIO-AArch64-Linux-8.0.18895/bin64/drrun -t drcachesim -simulator_type view -indir drmemtrace.python3.8.4097740.2425.dir | python ./src/main.py -outFile ~/test.result
+
+cat small_assembly.log |python ./src/main.py -outFile ~/test.result
+```

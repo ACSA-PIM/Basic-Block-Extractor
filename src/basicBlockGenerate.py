@@ -1,6 +1,65 @@
 from terminal_command import TIMEOUT_COMMAND,TIMEOUT_severalCOMMAND,checkFileByRegex
 from tsjPython.tsjCommonFunc import *
 import global_variable as glv
+from collections import defaultdict
+import sys
+
+def readSavePile():
+    tmp_inst_text=[]
+    tmp_inst_binary=[]
+    tmp_inst_binary_reverse=[]
+
+    unique_revBiblock=set()
+    frequencyRevBiBlock = defaultdict(int)
+
+    count=0
+    prefixLen=0
+    matchInstructionStart=13
+    matchAbbreviationStart=42
+    try:
+        line = sys.stdin.readline()    # 读取第一行
+        while line is not None and line != '':
+            if prefixLen==0:
+                if re.match("^(T[a-zA-Z0-9]*) ",line):
+                    prefixLen=len(re.match("^(T[a-zA-Z0-9]*) ",line).group(1))
+                    ic(prefixLen)
+                    matchInstructionStart=prefixLen+5
+                    matchAbbreviationStart=prefixLen+34
+
+            if count%50000==0:
+                yellowPrint("scan {} lines…… write {} block to {}".format(count,len(unique_revBiblock),glv._get("pipeModeOutputPath")))
+            count+=1
+            ic(line)
+            if line[matchInstructionStart:matchInstructionStart+4]=="0000" \
+                and line[matchAbbreviationStart:matchAbbreviationStart+1]!="b" and line[matchAbbreviationStart:matchAbbreviationStart+1]!="c" \
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="nop" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="dmb" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="msr"\
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="mrs" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="svc" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="sys"\
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="isb" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="ret" and line[matchAbbreviationStart:matchAbbreviationStart+3]!="tbz"\
+                and line[matchAbbreviationStart:matchAbbreviationStart+3]!="tbn": #去除b 和c开头的
+
+                ic("read normal lines",line[matchAbbreviationStart:-1])
+                tmp_inst_text.append(line[matchAbbreviationStart:-1])# 去除 \n
+                tmp_inst_binary.append(line[matchAbbreviationStart-11:matchAbbreviationStart-3])
+                tmp_inst_binary_reverse.append(binaryReverse(line[matchAbbreviationStart-11:matchAbbreviationStart-3]))
+            elif line[matchInstructionStart:matchInstructionStart+4]=="writ" or \
+                line[matchInstructionStart:matchInstructionStart+4]=="read" or \
+                line[matchAbbreviationStart:matchAbbreviationStart+1]=="b":
+                ic("Cut")
+                if len(tmp_inst_text) > glv._get("skip_num"):
+                    ic("ACC")
+                    unique_revBiblock.add(str(' '.join(tmp_inst_binary_reverse)))
+                    frequencyRevBiBlock[' '.join(tmp_inst_binary_reverse)] += 1
+                tmp_inst_text=[]
+                tmp_inst_binary=[]
+                tmp_inst_binary_reverse=[]
+            line = sys.stdin.readline()    # 读取下一行
+    except KeyboardInterrupt:
+        errorPrint("ctrl+c KeyboardInterrupt lead to Save tmp file……")
+        writePipeModeFile(unique_revBiblock,frequencyRevBiBlock)
+    except Exception as e:
+        errorPrint("error = {}".format(e))
+        raise TypeError("readSavePile Error = {}".format(e))
+    writePipeModeFile(unique_revBiblock,frequencyRevBiBlock)
 
 def findRawLogList():
     command='ls '+glv._get("inputFilePath")+glv._get("taskName")
@@ -33,3 +92,11 @@ def write2log(totalDataDict):
         fwriteblockfreq.writelines(tmp_block_binary_reverse+','+str(frequencyRevBiBlock[tmp_block_binary_reverse])+"\n")
     fwriteblockfreq.close()
     yellowPrint("write {} to log Finished: {}".format(len(totalDataDict.get("unique_revBiblock")),outputTaskNameFullName))
+
+def writePipeModeFile(unique_revBiblock,frequencyRevBiBlock):
+    filename = glv._get("pipeModeOutputPath")
+    fwriteblockfreq = open(filename, "w")
+    for tmp_block_binary_reverse in unique_revBiblock:
+        fwriteblockfreq.writelines(tmp_block_binary_reverse+','+str(frequencyRevBiBlock[tmp_block_binary_reverse])+"\n")
+    fwriteblockfreq.close()
+    yellowPrint("write {} to log Finished: {}".format(len(unique_revBiblock),filename))

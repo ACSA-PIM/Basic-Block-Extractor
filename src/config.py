@@ -4,6 +4,8 @@ import time
 
 glv._init()
 
+glv._set("mode", "runToSet") # pipeInputMode or normal
+glv._set("pipeModeOutputPath", "/home/shaojiemike/pipe.log")
 glv._set("taskName", "OpenBLASRawAssembly")# alse the directory
 glv._set("inputFilePath", "/home/shaojiemike/test/DynamoRIO/") #DynamoRIO/
 glv._set("UopsTableFilePath", "./arm2uops/UopsTable.txt")
