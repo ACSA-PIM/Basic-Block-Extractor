@@ -65,7 +65,7 @@ def readSavePile():
     writePipeModeFile(unique_revBiblock,frequencyRevBiBlock)
 
 def findRawLogList():
-    command='ls '+glv._get("inputFilePath")+glv._get("taskName")
+    command='ls '+glv._get("inputFilePath")
     RawLogList=TIMEOUT_severalCOMMAND(command,glv._get("findTimeout"))
     ic(RawLogList)
     return RawLogList

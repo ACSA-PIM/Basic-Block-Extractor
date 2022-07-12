@@ -163,7 +163,7 @@ def reduceQueue2dataDict(queueDict,dataDict):
     return dataDict
 
 def MultiProcessLog(logEntry):
-    filename=glv._get("inputFilePath")+glv._get("taskName")+"/"+logEntry[:-1]
+    filename=glv._get("inputFilePath")+"/"+logEntry[:-1]
     ic(filename)
     num_file=fastfileLineNum(filename)
     ic("logfileline is {}".format(num_file))
@@ -187,7 +187,7 @@ def MultiProcessLog(logEntry):
     for p in pList:
         p.start()
     
-    taskName=glv._get("taskName")+" "+logEntry[:-1]
+    taskName=glv._get("outputTaskName")+" "+logEntry[:-1]
     # https://stackoverflow.com/questions/19924104/python-multiprocessing-handling-child-errors-in-parent
     if glv._get("debug")=='no':
         stdscr = curses.initscr()
