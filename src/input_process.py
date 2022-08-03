@@ -48,7 +48,7 @@ def inputParameters():
             dest="debug",
             type=str,
             choices=["yes", "no"],
-            default="yes",
+            default="no",
         )
         args = parser.parse_args()
         # glv._set("BHiveCount",args.BHiveCount)
@@ -76,7 +76,7 @@ def inputParameters():
             dest="debug",
             type=str,
             choices=["yes", "no"],
-            default="yes",
+            default="no",
         )
         args = parser.parse_args()
         glv._set("pipeModeOutputPath",args.pipe_Mode_OutputPath)
