@@ -75,9 +75,7 @@ You need to modify the configuration in `./src/config.py` as explained below:
 | Parameter                  | Description |
 |----------------------------|-------------|
 |inputFilePath               | Input assembly file directory |
-|useAllFileInDirectory       | Whether to use all files in the input assembly file directory; default is not to use
-
- all. Specify useAllFileListInDirectory if necessary (considering the need to summarize multiple assembly files in the folder) |
+|useAllFileInDirectory       | Whether to use all files in the input assembly file directory; default is not to use all. Specify useAllFileListInDirectory if necessary (considering the need to summarize multiple assembly files in the folder) |
 |useAllFileListInDirectory   | Effective when `glv._get("useAllFileInDirectory")=="no"`, specifies the assembly files to use in the directory |
 |outputTaskName              | Output file name. The actual save file will have a suffix. For example, if outputTaskName is ffmpeg, the save file name might be `ffmpeg_useFileNum_1_skipNum_0.log` |
 |outputFilePath              | Output file directory |
