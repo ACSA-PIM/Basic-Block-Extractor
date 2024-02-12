@@ -4,7 +4,7 @@
 
 ## 仓库功能
 
-![](https://shaojiemike.oss-cn-hangzhou.aliyuncs.com/img/20220712145409.png)
+![](https://pic.shaojiemike.top/img/20220712145409.png)
 
 本仓库代码实现了对DynamoRIO产生的汇编筛选，去重汇总统计，最后得到精简的基本块信息。对应图中红框蓝底部分。
 
